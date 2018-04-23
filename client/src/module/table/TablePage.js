@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
-import {Col, Row} from 'antd';
+import {Col, Row, DatePicker} from 'antd';
 
 
 class TablePage extends Component {
@@ -20,7 +20,13 @@ class TablePage extends Component {
         return (
             <div>
                 <Row>
-                    <Col>
+                    <Col span={4}>
+                        <label>Start:</label>
+                        <DatePicker />
+                    </Col>
+                    <Col span={4}>
+                        <label>End:</label>
+                        <DatePicker />
                     </Col>
                 </Row>
             </div>
