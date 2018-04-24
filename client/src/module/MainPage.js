@@ -61,7 +61,6 @@ class MainPage extends Component {
           </Row>
         </Header>
         <Content>
-            <div>Content</div>
             <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
               <Switch>
                   <Route path={this.props.match.url+paths.table} component={TablePage}/>
