@@ -2,31 +2,23 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {Col, Row, DatePicker, Button, Input, Icon, Divider, Tabs, Table} from 'antd';
 import request from 'superagent';
-import moment from 'moment';
 
 const TabPane = Tabs.TabPane;
 const columnsA = [{
     title: '时间',
-    dataIndex: 'date',
-    sorter: (a, b) => a.date - b.date,
-    render: (text, row, index) => {
-        return moment(text).format("YYYY-MM-DD");
-    }
+    dataIndex: 'date'
 }, {
     title: '书名',
     dataIndex: 'bookName'
 }, {
     title: '价格',
-    dataIndex: 'price',
-        sorter: (a, b) => a.price - b.price,
+    dataIndex: 'price'
 }, {
     title: '数量',
-    dataIndex: 'count',
-        sorter: (a, b) => a.count - b.count,
+    dataIndex: 'count'
 }, {
-    title: '码洋',
-    dataIndex: 'maYang',
-        sorter: (a, b) => a.maYang - b.maYang,
+    title: '洋码',
+    dataIndex: 'maYang'
 }], columnsB = [
     {
         title: '书名',
@@ -84,65 +76,14 @@ const columnsA = [{
     }, {
         title: 'proportion',
         dataIndex: 'proportion'
-    }],
-    columnsD = [
-        {
-            title: '业务类型',
-            dataIndex: 'type'
-        }, {
-            title: '数量',
-            dataIndex: 'count'
-        }, {
-            title: '洋码',
-            dataIndex: 'maYang'
-        }, {
-            title: '180天同比',
-            dataIndex: 'countFor180'
-        }, {
-            title: '360天同比',
-            dataIndex: 'countFor360'
-        }, {
-            title: '增长',
-            dataIndex: 'increase'
-        }, {
-            title: 'proportion',
-            dataIndex: 'proportion'
-        }
-];
+    }
+]
 
 const dataA = [{
     "id": 1,
     "date": 1521763200000,
     "bookName": "山东 语文读本 六年级上册",
     "price": "16",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 2,
-    "date": 1533763200000,
-    "bookName": "山东 英语读本 一年级上册",
-    "price": "21",
-    "count": 0,
-    "maYang": 127200.0
-},{
-    "id": 1,
-    "date": 1521113200000,
-    "bookName": "山东 语文读本 三年级上册",
-    "price": "31",
-    "count": 0,
-    "maYang": 333200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "47",
-    "count": 0,
-    "maYang": 255500.0
-},{
-    "id": 1,
-    "date": 1521123400000,
-    "bookName": "广西 语文读本 三年级上册",
-    "price": "89",
     "count": 0,
     "maYang": 287200.0
 }], dataB = [
@@ -180,7 +121,7 @@ const dataA = [{
         "proportion": "0.0"
     }];
 
-class TablePage extends Component {
+class Table2Page extends Component {
 
     constructor(props) {
         super(props);
@@ -230,16 +171,18 @@ class TablePage extends Component {
 
         return [
             <h1>
-                生产数据
+                入库数据
             </h1>,
             <div>
-                <Row gutter={6}>
-                    <Col span={4} offset={1}>
-                        <DatePicker value={fromTT} placeholder="请选择起始日期"
+                <Row gutter={4}>
+                    <Col span={2}/>
+                    <Col span={4}>
+                        <label>Start:</label>
+                        <DatePicker value={fromTT}
                                     disabledDate={
                                         (current) => {
-                                            if (current && toTT)
-                                                return current.isSameOrAfter(toTT)
+                                            if (toTT)
+                                                return current.isBefore(toTT)
                                             else
                                                 return false;
                                         }} onChange={(date, dateString) => {
@@ -247,50 +190,50 @@ class TablePage extends Component {
                         }}/>
                     </Col>
                     <Col span={4}>
-                        <DatePicker value={toTT} placeholder="请选择结束日期"
+                        <label>End:</label>
+                        <DatePicker value={toTT}
                                     disabledDate={
                                         (current) => {
-                                            if (current && fromTT)
-                                                return current.isSameOrBefore(fromTT);
+                                            if (fromTT)
+                                                return current.isAfter(fromTT);
                                             else
                                                 return false;
                                         }} onChange={(date, dateString) => {
                             this.setState({toTT: date});
                         }}/>
                     </Col>
-                    <Col span={6}>
+                </Row>
+                <br/>
+                <Row gutter={16}>
+                    <Col span={2}/>
+                    <Col span={8}>
                         <Input
-                            placeholder="请输入书名"
+                            placeholder="Enter book name"
                             prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
                             suffix={suffix} value={bookName}
                             onChange={this.onChangeUserName}
                             ref={node => this.bookNameInput = node}/>
                     </Col>
-                    <Col span={2} push={2}>
-                        <Button onClick={this.search} type="primary" icon="search">查询</Button>
+                    <Col span={4}>
+                        <Button onClick={this.search} type="primary" icon="search">Search</Button>
                     </Col>
                 </Row>
                 <Divider/>
                 <Row>
-                    <Col span={22} offset={1}>
+                    <Col span={20} offset={2}>
                         <Tabs defaultActiveKey="1">
-                            <TabPane tab={<span><Icon type="desktop"/>原始数据明细表</span>} key="1">
+                            <TabPane tab={<span><Icon type="desktop"/>表1</span>} key="1">
                                 <Table columns={columnsA} dataSource={tableA}/>
                             </TabPane>
                             {tableB.length > 0 &&
-                                <TabPane tab={<span><Icon type="line-chart"/>按书名执行分类汇总的明细表</span>} key="2">
-                                    <Table columns={columnsB} dataSource={tableB}/>
-                                </TabPane>
+                            <TabPane tab={<span><Icon type="line-chart"/>表2</span>} key="2">
+                                <Table columns={columnsB} dataSource={tableB}/>
+                            </TabPane>
                             }
                             {tableC.length > 0 &&
-                                <TabPane tab={<span><Icon type="area-chart"/>按类型执行分类汇总的明细表</span>} key="3">
-                                    <Table columns={columnsC} dataSource={tableC}/>
-                                </TabPane>
-                            }
-                            {tableC.length > 0 &&
-                                <TabPane tab={<span><Icon type="pie-chart"/>按业务类型执行分类汇总的明细表</span>} key="4">
-                                    <Table columns={columnsD} dataSource={tableC}/>
-                                </TabPane>
+                            <TabPane tab={<span><Icon type="area-chart"/>表3</span>} key="3">
+                                <Table columns={columnsC} dataSource={tableC}/>
+                            </TabPane>
                             }
                         </Tabs>
                     </Col>
@@ -301,4 +244,4 @@ class TablePage extends Component {
     }
 }
 
-export default TablePage;
+export default Table2Page;

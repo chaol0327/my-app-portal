@@ -1,8 +1,12 @@
 
 export const PATH_MAP = {
-    login: "/login",
-    main : "/main",
     home : "/home",
-    table : "/table",
-    task : "/task"
+    table1 : "/table1",
+    table2 : "/table2",
+    table3 : "/table3",
+    table4 : "/table4",
+    table5 : "/table5",
+    table6 : "/table6",
+    task : "/task",
+    login: "/login",
 };

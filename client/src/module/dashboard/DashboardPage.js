@@ -5,14 +5,14 @@ import {LineChart, Line, Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, 
 
 
 const data = [
-    { name: 'Page A', uv: 300, pv: 2600, amt: 3400 },
-    { name: 'Page B', uv: 400, pv: 4367, amt: 6400 },
-    { name: 'Page C', uv: 300, pv: 1398, amt: 2400 },
-    { name: 'Page D', uv: 200, pv: 9800, amt: 2400 },
-    { name: 'Page E', uv: 278, pv: 3908, amt: 2400 },
-    { name: 'Page F', uv: 189, pv: 4800, amt: 2400 },
-    { name: 'Page G', uv: 189, pv: 4800, amt: 2400 },
-    { name: 'Page H', uv: 309, pv: 4800, amt: 2400 },
+    { name: '2017-01', uv: 300, pv: 2600, amt: 3400 },
+    { name: '2017-02', uv: 400, pv: 4367, amt: 6400 },
+    { name: '2017-03', uv: 300, pv: 1398, amt: 2400 },
+    { name: '2017-04', uv: 200, pv: 9800, amt: 2400 },
+    { name: '2017-05', uv: 278, pv: 3908, amt: 2400 },
+    { name: '2017-06', uv: 189, pv: 4800, amt: 2400 },
+    { name: '2017-07', uv: 189, pv: 4800, amt: 2400 },
+    { name: '2017-08', uv: 309, pv: 4800, amt: 2400 },
   ];
 
 class DashboardPage extends Component {
@@ -34,8 +34,9 @@ class DashboardPage extends Component {
                 <Row gutter={8}>
                     <Col>
                         <Card>
-                            <p>Last Sync: 9 days ago</p>
-                            <p>Last Sync Count: xxxx</p>
+                            <p>上一次同步: 9 天前</p>
+                            <p>上一次同步时间段: 2017-10-10 至 2018-5-1</p>
+                            <p>当前数据时间跨度: 2015-01-01 至 2018-5-1</p>
                         </Card>
                     </Col>
                 </Row>
