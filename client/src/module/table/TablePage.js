@@ -145,6 +145,111 @@ const dataA = [{
     "price": "89",
     "count": 0,
     "maYang": 287200.0
+},{
+    "id": 1,
+    "date": 1521763200000,
+    "bookName": "山东 语文读本 六年级上册",
+    "price": "16",
+    "count": 0,
+    "maYang": 287200.0
+},{
+    "id": 2,
+    "date": 1533763200000,
+    "bookName": "山东 英语读本 一年级上册",
+    "price": "21",
+    "count": 0,
+    "maYang": 127200.0
+},{
+    "id": 1,
+    "date": 1521113200000,
+    "bookName": "山东 语文读本 三年级上册",
+    "price": "31",
+    "count": 0,
+    "maYang": 333200.0
+},{
+    "id": 1,
+    "date": 1521763200000,
+    "bookName": "山东 语文读本 六年级上册",
+    "price": "47",
+    "count": 0,
+    "maYang": 255500.0
+},{
+    "id": 1,
+    "date": 1521123400000,
+    "bookName": "广西 语文读本 三年级上册",
+    "price": "89",
+    "count": 0,
+    "maYang": 287200.0
+},{
+    "id": 1,
+    "date": 1521763200000,
+    "bookName": "山东 语文读本 六年级上册",
+    "price": "16",
+    "count": 0,
+    "maYang": 287200.0
+},{
+    "id": 2,
+    "date": 1533763200000,
+    "bookName": "山东 英语读本 一年级上册",
+    "price": "21",
+    "count": 0,
+    "maYang": 127200.0
+},{
+    "id": 1,
+    "date": 1521113200000,
+    "bookName": "山东 语文读本 三年级上册",
+    "price": "31",
+    "count": 0,
+    "maYang": 333200.0
+},{
+    "id": 1,
+    "date": 1521763200000,
+    "bookName": "山东 语文读本 六年级上册",
+    "price": "47",
+    "count": 0,
+    "maYang": 255500.0
+},{
+    "id": 1,
+    "date": 1521123400000,
+    "bookName": "广西 语文读本 三年级上册",
+    "price": "89",
+    "count": 0,
+    "maYang": 287200.0
+},{
+    "id": 1,
+    "date": 1521763200000,
+    "bookName": "山东 语文读本 六年级上册",
+    "price": "16",
+    "count": 0,
+    "maYang": 287200.0
+},{
+    "id": 2,
+    "date": 1533763200000,
+    "bookName": "山东 英语读本 一年级上册",
+    "price": "21",
+    "count": 0,
+    "maYang": 127200.0
+},{
+    "id": 1,
+    "date": 1521113200000,
+    "bookName": "山东 语文读本 三年级上册",
+    "price": "31",
+    "count": 0,
+    "maYang": 333200.0
+},{
+    "id": 1,
+    "date": 1521763200000,
+    "bookName": "山东 语文读本 六年级上册",
+    "price": "47",
+    "count": 0,
+    "maYang": 255500.0
+},{
+    "id": 1,
+    "date": 1521123400000,
+    "bookName": "广西 语文读本 三年级上册",
+    "price": "89",
+    "count": 0,
+    "maYang": 287200.0
 }], dataB = [
     {
         "bookName": "山东 语文读本 六年级上册",
@@ -153,10 +258,34 @@ const dataA = [{
         "maYang": 287200.0,
         "type": null,
         "businessType": null,
-        "countFor90": 1,
-        "countFor180": 0,
-        "countFor360": 0,
+        "countFor90": 18,
+        "countFor180": 36,
+        "countFor360": 99,
         "increase": "0.0",
+        "dateRange": null
+    },{
+        "bookName": "新时代 学习系列 第一册",
+        "price": null,
+        "count": 1,
+        "maYang": 257200.0,
+        "type": null,
+        "businessType": null,
+        "countFor90": "-",
+        "countFor180": "-",
+        "countFor360": "-",
+        "increase": "6.0",
+        "dateRange": null
+    },{
+        "bookName": "四川 语文读本 一年级",
+        "price": null,
+        "count": 1,
+        "maYang": 287200.0,
+        "type": null,
+        "businessType": null,
+        "countFor90": 66,
+        "countFor180": 9,
+        "countFor360": 233,
+        "increase": "66.0",
         "dateRange": null
     }], dataC1 = [
     {
@@ -179,6 +308,15 @@ const dataA = [{
         "increase": null,
         "proportion": "0.0"
     }];
+
+
+
+const tableConfig1={
+
+},tableConfig2={
+    pagination: 'none',
+}
+
 
 class TablePage extends Component {
 
@@ -273,13 +411,13 @@ class TablePage extends Component {
                 <Divider/>
                 <Row>
                     <Col span={22} offset={1}>
-                        <Tabs defaultActiveKey="1">
+                        <Tabs defaultActiveKey="1" tabBarExtraContent={<Button type="primary" icon="export">导出</Button>}>
                             <TabPane tab={<span><Icon type="desktop"/>原始数据明细表</span>} key="1">
-                                <Table columns={columnsA} dataSource={tableA}/>
+                                <Table size="middle" columns={columnsA} dataSource={tableA}/>
                             </TabPane>
                             {tableB.length > 0 &&
                                 <TabPane tab={<span><Icon type="line-chart"/>按书名执行分类汇总的明细表</span>} key="2">
-                                    <Table columns={columnsB} dataSource={tableB}/>
+                                    <Table pagination={false} columns={columnsB} dataSource={tableB}/>
                                 </TabPane>
                             }
                             {tableC.length > 0 &&
