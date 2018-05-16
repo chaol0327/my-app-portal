@@ -4,7 +4,9 @@ const https =  require("https"),
     app = express(),
     path = require('path'),
     compression = require('compression'),
-    bodyParser  =  require("body-parser");
+    bodyParser  =  require("body-parser"),
+    cookieParser = require('cookie-parser'),
+    session = require('express-session');
 
 
 process.on('SIGINT', function () {
@@ -24,7 +26,6 @@ process.on('uncaughtException', function (err) {
 });
 
 function cleanUp() {
-    reg.unregister();
     setTimeout(function () {
         process.exit(1);
     }, 1000);
@@ -36,10 +37,18 @@ function cleanUp() {
     app.use(compression());
     app.use(bodyParser.json());       // to support JSON-encoded bodies
     app.use(bodyParser.urlencoded({ extended: false })); // to support URL-encoded bodies
+    app.use(cookieParser("test key"));
+    app.use(session({
+        cookie:{maxAge: 30 * 60 * 1000, secure: true, httpOnly: true},
+        secret: "test key",
+        resave: false,
+        rolling: true,
+        saveUninitialized: false
+    }));
 
     //API routes
-    // var apiRoutes = require("./apiRoutes")(config, reg.consul());
-    // app.use('/api',apiRoutes.routes);
+    var apiRoutes = require("./apiRoutes")({});
+    app.use('/api',apiRoutes.routes);
 
     app.get('*', function(req, res) {
         res.sendFile('index.html', { root: app.rootPath });
