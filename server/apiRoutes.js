@@ -7,6 +7,9 @@ module.exports = function (config) {
         rp = require("request-promise");
 
     //API routes
+    apiRoutes.all('/callAPI/:path', handleRequest);
+
+
     apiRoutes.all('/pec1sumiddleware', [checkSessionLock, tryPolicyLock, function (req, res) {
         policyHandle(req, res, function () {
             getLock(req, res)
@@ -40,6 +43,23 @@ module.exports = function (config) {
     Error503.prototype.toString = function () {
         return this.status + ': "' + this.message + '"';
     }
+
+    const apiHost = "http://10.250.54.74:12378";
+    function handleRequest(req, res) {
+        const path = `${apiHost}/${req.params.path}`;
+        const option = {
+            method: req.method.toUpperCase(),
+            uri: path,
+            body: req.body,
+            json: true // Automatically stringifies the body to JSON
+        };
+        return rp(option).then((data) =>{
+            res.status(200).json(data);
+        }).catch((error) => {
+            res.status(500).send({error});
+        });
+    }
+
 
     //Authentication
     function checkLogin(req, res) {

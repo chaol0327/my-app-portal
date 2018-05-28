@@ -19,6 +19,10 @@ class MainPage extends Component {
     };
   }
 
+    componentDidCatch(error, info){
+        console.error(error);
+    }
+
   getPageIndex = () => {
     let index = 0;
     if(this.props.location)
@@ -42,7 +46,7 @@ class MainPage extends Component {
                         <Icon type="home" />主页
                     </NavLink>
                 </Menu.Item>
-                  <Menu.SubMenu title={<span><Icon type="book" />数据查询</span>}>
+                  <Menu.SubMenu key="s1" title={<span><Icon type="book" />数据查询</span>}>
                       <Menu.Item key="2">
                           <NavLink to={paths.table1} activeClassName="active">
                               <Icon type="table" />生产

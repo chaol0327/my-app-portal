@@ -46,6 +46,11 @@ function cleanUp() {
         saveUninitialized: false
     }));
 
+    app.use('/static',express.static(app.rootPath + 'static'));
+    app.use('/img',express.static(app.rootPath + 'img'));
+    app.use('/service-worker.js',express.static(app.rootPath + 'service-worker.js'));
+
+
     //API routes
     var apiRoutes = require("./apiRoutes")({});
     app.use('/api',apiRoutes.routes);

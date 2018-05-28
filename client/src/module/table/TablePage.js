@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
-import {Col, Row, DatePicker, Button, Input, Icon, Divider, Tabs, Table} from 'antd';
+import {Col, Row, DatePicker, Button, Input, Icon, Divider, Tabs, Table, Pagination} from 'antd';
 import request from 'superagent';
 import moment from 'moment';
 
 const TabPane = Tabs.TabPane;
+
+const TablePagination = {
+    defaultCurrent: 1,
+    showSizeChanger: true,
+    pageSizeOptions : ['5', '10', '15', '20'],
+    size: "middle"
+}
 const columnsA = [{
     title: '时间',
     dataIndex: 'date',
@@ -88,7 +95,7 @@ const columnsA = [{
     columnsD = [
         {
             title: '业务类型',
-            dataIndex: 'type'
+            dataIndex: 'businessType'
         }, {
             title: '数量',
             dataIndex: 'count'
@@ -325,32 +332,56 @@ class TablePage extends Component {
         this.state = {
             tableA: [],
             tableB: [],
-            tableC: [],
+            tableC1: [],
+            tableC2: [],
+            loading: false
         };
+    }
+
+    componentDidMount(){
+        this.search();
+    }
+
+    componentDidCatch(error, info){
+        console.error(error);
     }
 
     search = () => {
         const {bookName, fromTT, toTT} = this.state;
-        // const fromUnixTT = fromTT.unix(), toUnixTT = toTT.unix();
+        const path = `/api/callAPI/tablea?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`;
 
-        // request.get("/tableA").then((response) => {
-        //     const data = response.body;
-        //     this.setState({data});
-        //     return request.get("/tableB");
-        // }).then((response) => {
-        //     const data = response.body;
-        //     this.setState({data});
-        // }).then( () => {
-        //     if (bookName && bookName.length > 0) {
-        //         request.get("/tableC")
-        //         .end((error, data) => {
-        //             this.setState({data});
-        //         })
-        //     }
-        // }).catch(err => {
-        //     console.error(err);
-        // });
-        this.setState({tableA: dataA, tableB: dataB, tableC: dataC1});
+        this.setState({loading: true});
+        request.get(path).then((response) => {
+            const data = response.body;
+            this.setState({tableA: data});
+            // return request.get("/tableB");
+        }).then(() => {
+            if(bookName && bookName.length > 0){
+                return request.get(`/api/callAPI/tableb?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`)
+                    .then((response) => {
+                        const data = response.body;
+                        this.setState({tableB: data});
+                    });
+            }
+        }).then(() => {
+            if(bookName && bookName.length > 0){
+                return request.get(`/api/callAPI/tablec1?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`)
+                    .then((response) => {
+                        const data = response.body;
+                        this.setState({tableC1: data});
+                        return request.get(`/api/callAPI/tablec2?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`)
+                            .then((response) => {
+                                const data = response.body;
+                                this.setState({tableC2: data});
+                            })
+                    })
+            }
+        }).then(() => {
+            this.setState({loading: false});
+        }).catch(err => {
+            this.setState({loading: false});
+            console.error(err);
+        });
     }
 
     emitEmpty = () => {
@@ -363,14 +394,14 @@ class TablePage extends Component {
 
 
     render() {
-        const {bookName, fromTT, toTT, tableA, tableB, tableC} = this.state;
+        const {loading, bookName, fromTT, toTT, tableA, tableB, tableC1, tableC2} = this.state;
         const suffix = bookName ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
 
         return [
-            <h1>
+            <h1 key="module_sc_title">
                 生产数据
             </h1>,
-            <div>
+            <div key="module_sc_content">
                 <Row gutter={6}>
                     <Col span={4} offset={1}>
                         <DatePicker value={fromTT} placeholder="请选择起始日期"
@@ -405,7 +436,7 @@ class TablePage extends Component {
                             ref={node => this.bookNameInput = node}/>
                     </Col>
                     <Col span={2} push={2}>
-                        <Button onClick={this.search} type="primary" icon="search">查询</Button>
+                        <Button onClick={this.search} disabled={!(bookName && bookName.length > 0)} loading={loading} type="primary" icon="search">查询</Button>
                     </Col>
                 </Row>
                 <Divider/>
@@ -413,21 +444,21 @@ class TablePage extends Component {
                     <Col span={22} offset={1}>
                         <Tabs defaultActiveKey="1" tabBarExtraContent={<Button type="primary" icon="export">导出</Button>}>
                             <TabPane tab={<span><Icon type="desktop"/>原始数据明细表</span>} key="1">
-                                <Table size="middle" columns={columnsA} dataSource={tableA}/>
+                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsA} dataSource={tableA}/>
                             </TabPane>
                             {tableB.length > 0 &&
                                 <TabPane tab={<span><Icon type="line-chart"/>按书名执行分类汇总的明细表</span>} key="2">
-                                    <Table pagination={false} columns={columnsB} dataSource={tableB}/>
+                                    <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsB} dataSource={tableB}/>
                                 </TabPane>
                             }
-                            {tableC.length > 0 &&
+                            {tableC1.length > 0 &&
                                 <TabPane tab={<span><Icon type="area-chart"/>按类型执行分类汇总的明细表</span>} key="3">
-                                    <Table columns={columnsC} dataSource={tableC}/>
+                                    <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsC} dataSource={tableC1}/>
                                 </TabPane>
                             }
-                            {tableC.length > 0 &&
+                            {tableC2.length > 0 &&
                                 <TabPane tab={<span><Icon type="pie-chart"/>按业务类型执行分类汇总的明细表</span>} key="4">
-                                    <Table columns={columnsD} dataSource={tableC}/>
+                                    <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsD} dataSource={tableC2}/>
                                 </TabPane>
                             }
                         </Tabs>
