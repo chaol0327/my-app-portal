@@ -6,6 +6,7 @@ const https =  require("https"),
     compression = require('compression'),
     bodyParser  =  require("body-parser"),
     cookieParser = require('cookie-parser'),
+    fileUpload = require('express-fileupload'),
     session = require('express-session');
 
 
@@ -50,6 +51,7 @@ function cleanUp() {
     app.use('/img',express.static(app.rootPath + 'img'));
     app.use('/service-worker.js',express.static(app.rootPath + 'service-worker.js'));
 
+    app.use(fileUpload());
 
     //API routes
     var apiRoutes = require("./apiRoutes")({});

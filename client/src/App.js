@@ -3,9 +3,18 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import MainPage from './module/MainPage';
 import {PATH_MAP as paths} from './common/Constant';
 import DashboardPage from './module/dashboard/DashboardPage';
-import TablePage from './module/table/TablePage';
-import Table2Page from './module/table/Table2Page';
+import TableSCPage from './module/table/TableSCPage';
+import TableRKPage from './module/table/TableRKPage';
 import TaskPage from './module/task/TaskPage';
+
+
+const FadingRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} component={props => (
+        <MainPage {...props}>
+            <Component {...props}/>
+        </MainPage>
+    )}/>
+)
 
 class App extends Component {
 
@@ -19,14 +28,12 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <MainPage>
             <Switch>
-                <Route path={paths.table1} component={TablePage}/>
-                <Route path={paths.table2} component={Table2Page}/>
-                <Route path={paths.task} component={TaskPage}/>
-                <Route component={DashboardPage}/>
+                <FadingRoute path={paths.tableSC} component={TableSCPage} />
+                <FadingRoute path={paths.tableRK} component={TableRKPage}/>
+                <FadingRoute path={paths.task} component={TaskPage}/>
+                <FadingRoute component={DashboardPage}/>
             </Switch>
-        </MainPage>
       </Router>
     );
   }
