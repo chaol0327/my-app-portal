@@ -12,7 +12,8 @@ module.exports = function (config) {
 
     var logger = require('bunyan').createLogger({name: "apiRoutes", type: "component"});
 
-    const apiHost = "http://10.250.54.74:12378";
+    const apiHost = "http://localhost:12378";
+    // const apiHost = "http://10.250.54.74:12378";
     function handleRequest(req, res) {
         const option = {
             method: req.method.toUpperCase(),

@@ -149,12 +149,15 @@ class TableRuKuPage extends Component {
             this.setState({tableA: data});
             // return request.get("/tableB");
         }).then(() => {
+            if( fromTT && toTT) {
                 return request.get(`/api/callAPI/tablees${query}`)
                     .then((response) => {
                         const data = response.body;
                         this.setState({tableB: data});
                     });
+            }
         }).then(() => {
+            if( fromTT && toTT) {
                 return request.get(`/api/callAPI/tablef1s${query}`)
                     .then((response) => {
                         const data = response.body;
@@ -165,6 +168,7 @@ class TableRuKuPage extends Component {
                                 this.setState({tableC2: data});
                             })
                     })
+            }
         }).then(() => {
             this.setState({loading: false});
             message.success("查询成功。");
@@ -217,7 +221,7 @@ class TableRuKuPage extends Component {
                     <Col span={22} offset={1}>
                         <Tabs defaultActiveKey="1" tabBarExtraContent={[
                             <Button type="primary" style={{marginRight: "10px"}} key="tabAction1" onClick={this.search} icon="reload">刷新</Button>,
-                            <Button type="primary" key="tabAction2" href="http://10.250.54.74:12378/exports" icon="export">导出</Button>
+                            <Button type="primary" key="tabAction2" href="http://localhost:12378/exports" icon="export">导出</Button>
                         ]}>
                             <TabPane tab={<span><Icon type="desktop"/>原始数据明细表</span>} key="1">
                                 <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsA} dataSource={tableA}/>

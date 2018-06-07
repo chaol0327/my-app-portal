@@ -91,8 +91,7 @@ class TaskPage extends Component {
         this.setState({ loading: true });
         let count = selectFiles.length;
         selectFiles.forEach((file) => {
-            request.put(`/api/callAPI/test`)
-                .send({path: `syncData/${syncType}/${file}`})
+            request.put(`/api/callAPI/syncData/${syncType}/${file}`)
                 .then(()=>{
                 message.success(`${file} 导入成功。`);
             }).catch((error) => {
@@ -109,7 +108,7 @@ class TaskPage extends Component {
     }
 
     render() {
-        const {visible, loading, fileList, fileStatusList} = this.state;
+        const {visible, loading, fileList, fileStatusList, syncType, selectFiles} = this.state;
         return([
                 <Row key="task1">
                     <Col span={10} offset={1}>
@@ -130,7 +129,7 @@ class TaskPage extends Component {
                 </Row>,
             <Modal key="task-modal"
                 visible={visible}
-                title="Title"
+                title="选择文件并导入"
                 onOk={this.handleSync}
                 onCancel={this.handleCancel}
                 footer={[
@@ -142,6 +141,7 @@ class TaskPage extends Component {
                     <Col span={8} offset={1}>
                         <Select style={{ width: '100%' }}
                                 placeholder="请选择导入的模块"
+                                value={syncType}
                                 onChange={(value) => {this.setState({syncType: value})}}>
                             {Object.keys(SyncTypeShowName).map((key) => {
                                 return <Select.Option key={key}>{SyncTypeShowName[key]}</Select.Option>
@@ -151,6 +151,7 @@ class TaskPage extends Component {
                     <Col span={12}>
                         <Select
                             mode="multiple"
+                            value={selectFiles}
                             style={{ width: '100%' }}
                             placeholder="请选择导入的文件"
                             onChange={(value) => {

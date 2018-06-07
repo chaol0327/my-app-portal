@@ -258,7 +258,7 @@ class TableSCPage extends Component {
                     <Col span={22} offset={1}>
                         <Tabs defaultActiveKey="1" tabBarExtraContent={[
                             <Button type="primary" key="tabAction1" style={{marginRight: "10px"}} onClick={this.search} icon="reload">刷新</Button>,
-                            <Button type="primary" key="tabAction2" href="http://10.250.54.74:12378/exports" icon="export">导出</Button>
+                            <Button type="primary" key="tabAction2" href="http://localhost:12378/exports" icon="export">导出</Button>
                         ]}>
                             <TabPane tab={<span><Icon type="desktop"/>原始数据明细表</span>} key="1">
                                 <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsA} dataSource={tableA}/>
