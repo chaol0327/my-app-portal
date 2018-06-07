@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from "prop-types";
-import {Col, Row, DatePicker, Button, Input, Icon, Divider, Tabs, Table, Pagination} from 'antd';
+import {Col, Row, DatePicker, Button, Input, Icon, Divider, Tabs, Table, message, Alert} from 'antd';
 import request from 'superagent';
 import moment from 'moment';
 
@@ -117,207 +116,6 @@ const columnsA = [{
         }
 ];
 
-const dataA = [{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "16",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 2,
-    "date": 1533763200000,
-    "bookName": "山东 英语读本 一年级上册",
-    "price": "21",
-    "count": 0,
-    "maYang": 127200.0
-},{
-    "id": 1,
-    "date": 1521113200000,
-    "bookName": "山东 语文读本 三年级上册",
-    "price": "31",
-    "count": 0,
-    "maYang": 333200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "47",
-    "count": 0,
-    "maYang": 255500.0
-},{
-    "id": 1,
-    "date": 1521123400000,
-    "bookName": "广西 语文读本 三年级上册",
-    "price": "89",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "16",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 2,
-    "date": 1533763200000,
-    "bookName": "山东 英语读本 一年级上册",
-    "price": "21",
-    "count": 0,
-    "maYang": 127200.0
-},{
-    "id": 1,
-    "date": 1521113200000,
-    "bookName": "山东 语文读本 三年级上册",
-    "price": "31",
-    "count": 0,
-    "maYang": 333200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "47",
-    "count": 0,
-    "maYang": 255500.0
-},{
-    "id": 1,
-    "date": 1521123400000,
-    "bookName": "广西 语文读本 三年级上册",
-    "price": "89",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "16",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 2,
-    "date": 1533763200000,
-    "bookName": "山东 英语读本 一年级上册",
-    "price": "21",
-    "count": 0,
-    "maYang": 127200.0
-},{
-    "id": 1,
-    "date": 1521113200000,
-    "bookName": "山东 语文读本 三年级上册",
-    "price": "31",
-    "count": 0,
-    "maYang": 333200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "47",
-    "count": 0,
-    "maYang": 255500.0
-},{
-    "id": 1,
-    "date": 1521123400000,
-    "bookName": "广西 语文读本 三年级上册",
-    "price": "89",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "16",
-    "count": 0,
-    "maYang": 287200.0
-},{
-    "id": 2,
-    "date": 1533763200000,
-    "bookName": "山东 英语读本 一年级上册",
-    "price": "21",
-    "count": 0,
-    "maYang": 127200.0
-},{
-    "id": 1,
-    "date": 1521113200000,
-    "bookName": "山东 语文读本 三年级上册",
-    "price": "31",
-    "count": 0,
-    "maYang": 333200.0
-},{
-    "id": 1,
-    "date": 1521763200000,
-    "bookName": "山东 语文读本 六年级上册",
-    "price": "47",
-    "count": 0,
-    "maYang": 255500.0
-},{
-    "id": 1,
-    "date": 1521123400000,
-    "bookName": "广西 语文读本 三年级上册",
-    "price": "89",
-    "count": 0,
-    "maYang": 287200.0
-}], dataB = [
-    {
-        "bookName": "山东 语文读本 六年级上册",
-        "price": null,
-        "count": 1,
-        "maYang": 287200.0,
-        "type": null,
-        "businessType": null,
-        "countFor90": 18,
-        "countFor180": 36,
-        "countFor360": 99,
-        "increase": "0.0",
-        "dateRange": null
-    },{
-        "bookName": "新时代 学习系列 第一册",
-        "price": null,
-        "count": 1,
-        "maYang": 257200.0,
-        "type": null,
-        "businessType": null,
-        "countFor90": "-",
-        "countFor180": "-",
-        "countFor360": "-",
-        "increase": "6.0",
-        "dateRange": null
-    },{
-        "bookName": "四川 语文读本 一年级",
-        "price": null,
-        "count": 1,
-        "maYang": 287200.0,
-        "type": null,
-        "businessType": null,
-        "countFor90": 66,
-        "countFor180": 9,
-        "countFor360": 233,
-        "increase": "66.0",
-        "dateRange": null
-    }], dataC1 = [
-    {
-        "id": 1,
-        "type": "test type",
-        "count": 1,
-        "maYang": 287200.0,
-        "countFor180": 1,
-        "countFor360": 0,
-        "increase": null,
-        "proportion": "0.0"
-    }], dataC2 = [
-    {
-        "id": 1,
-        "businessType": "test business type",
-        "count": 1,
-        "maYang": 287200.0,
-        "countFor180": 1,
-        "countFor360": 0,
-        "increase": null,
-        "proportion": "0.0"
-    }];
-
-
-
 const tableConfig1={
 
 },tableConfig2={
@@ -325,7 +123,7 @@ const tableConfig1={
 }
 
 
-class TablePage extends Component {
+class TableSCPage extends Component {
 
     constructor(props) {
         super(props);
@@ -346,9 +144,21 @@ class TablePage extends Component {
         console.error(error);
     }
 
+    preSearch = () => {
+        const {fromTT, toTT} = this.state;
+        if(fromTT && toTT){
+            this.setState({invalidInput: false}, this.search);
+        }else {
+            this.setState({invalidInput: true});
+        }
+
+    }
+
     search = () => {
         const {bookName, fromTT, toTT} = this.state;
-        const path = `/api/callAPI/tablea?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`;
+
+        const query=`?search=${bookName?bookName:""}${fromTT?"&from="+fromTT.unix():''}${toTT?"&to="+toTT.unix():''}`,
+            path = `/api/callAPI/tableas${query}`;
 
         this.setState({loading: true});
         request.get(path).then((response) => {
@@ -357,29 +167,33 @@ class TablePage extends Component {
             // return request.get("/tableB");
         }).then(() => {
             if(bookName && bookName.length > 0){
-                return request.get(`/api/callAPI/tableb?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`)
+                return request.get(`/api/callAPI/tablebs${query}`)
                     .then((response) => {
                         const data = response.body;
                         this.setState({tableB: data});
                     });
             }
         }).then(() => {
-            if(bookName && bookName.length > 0){
-                return request.get(`/api/callAPI/tablec1?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`)
+            if( fromTT && toTT && (bookName===undefined || bookName.length <= 0)){
+                return request.get(`/api/callAPI/tablec1s${query}`)
                     .then((response) => {
                         const data = response.body;
+                        // TODO - C1 key type distinct list
                         this.setState({tableC1: data});
-                        return request.get(`/api/callAPI/tablec2?from=${fromTT?fromTT.unix():''}&to=${toTT?toTT.unix():''}&name=${bookName?bookName:""}`)
+                        return request.get(`/api/callAPI/tablec2s${query}`)
                             .then((response) => {
                                 const data = response.body;
+                                // TODO - C2 key type distinct list
                                 this.setState({tableC2: data});
                             })
                     })
             }
         }).then(() => {
             this.setState({loading: false});
+            message.success("查询成功。");
         }).catch(err => {
             this.setState({loading: false});
+            message.error("查询失败，请重试。");
             console.error(err);
         });
     }
@@ -404,7 +218,7 @@ class TablePage extends Component {
             <div key="module_sc_content">
                 <Row gutter={6}>
                     <Col span={4} offset={1}>
-                        <DatePicker value={fromTT} placeholder="请选择起始日期"
+                        <DatePicker value={fromTT} placeholder="请选择起始日期(必填)"
                                     disabledDate={
                                         (current) => {
                                             if (current && toTT)
@@ -416,7 +230,7 @@ class TablePage extends Component {
                         }}/>
                     </Col>
                     <Col span={4}>
-                        <DatePicker value={toTT} placeholder="请选择结束日期"
+                        <DatePicker value={toTT} placeholder="请选择结束日期(必填)"
                                     disabledDate={
                                         (current) => {
                                             if (current && fromTT)
@@ -429,20 +243,23 @@ class TablePage extends Component {
                     </Col>
                     <Col span={6}>
                         <Input
-                            placeholder="请输入书名"
+                            placeholder="请输入书名(选填)"
                             prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
                             suffix={suffix} value={bookName}
                             onChange={this.onChangeUserName}
                             ref={node => this.bookNameInput = node}/>
                     </Col>
                     <Col span={2} push={2}>
-                        <Button onClick={this.search} disabled={!(bookName && bookName.length > 0)} loading={loading} type="primary" icon="search">查询</Button>
+                        <Button onClick={this.search} loading={loading} disabled={!(fromTT && toTT)} type="primary" icon="search">查询</Button>
                     </Col>
                 </Row>
                 <Divider/>
                 <Row>
                     <Col span={22} offset={1}>
-                        <Tabs defaultActiveKey="1" tabBarExtraContent={<Button type="primary" icon="export">导出</Button>}>
+                        <Tabs defaultActiveKey="1" tabBarExtraContent={[
+                            <Button type="primary" key="tabAction1" style={{marginRight: "10px"}} onClick={this.search} icon="reload">刷新</Button>,
+                            <Button type="primary" key="tabAction2" href="http://10.250.54.74:12378/exports" icon="export">导出</Button>
+                        ]}>
                             <TabPane tab={<span><Icon type="desktop"/>原始数据明细表</span>} key="1">
                                 <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsA} dataSource={tableA}/>
                             </TabPane>
@@ -453,7 +270,7 @@ class TablePage extends Component {
                             }
                             {tableC1.length > 0 &&
                                 <TabPane tab={<span><Icon type="area-chart"/>按类型执行分类汇总的明细表</span>} key="3">
-                                    <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsC} dataSource={tableC1}/>
+                                    <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsC} dataSource={tableC1} />
                                 </TabPane>
                             }
                             {tableC2.length > 0 &&
@@ -470,4 +287,4 @@ class TablePage extends Component {
     }
 }
 
-export default TablePage;
+export default TableSCPage;

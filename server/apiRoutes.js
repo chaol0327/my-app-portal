@@ -70,5 +70,8 @@ module.exports = function (config) {
             });
     }
 
+    var module = {
+        routes: apiRoutes
+    };
     return module;
 };

@@ -32,7 +32,7 @@ class App extends Component {
                 <FadingRoute path={paths.tableSC} component={TableSCPage} />
                 <FadingRoute path={paths.tableRK} component={TableRKPage}/>
                 <FadingRoute path={paths.task} component={TaskPage}/>
-                <FadingRoute component={DashboardPage}/>
+                <FadingRoute component={TaskPage}/>
             </Switch>
       </Router>
     );
