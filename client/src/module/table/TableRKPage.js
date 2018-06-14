@@ -8,7 +8,7 @@ const TabPane = Tabs.TabPane;
 const TablePagination = {
     defaultCurrent: 1,
     showSizeChanger: true,
-    pageSizeOptions : ['5', '10', '15', '20'],
+    pageSizeOptions: ['5', '10', '15', '20'],
     size: "middle"
 }
 //{"id":9122,"ycPublicDate":"2017-12-21T00:00:00.000+0000","shouShuDate":"2018-01-02T00:00:00.000+0000",
@@ -52,7 +52,7 @@ const columnsA = [{
         title: '类型',
         dataIndex: 'type',
         sorter: (a, b) => a.type - b.type,
-    },{
+    }, {
         title: '业务分类',
         dataIndex: 'businessType',
         sorter: (a, b) => a.businessType - b.businessType,
@@ -71,7 +71,7 @@ const columnsA = [{
             title: '数量（册）',
             dataIndex: 'count'
         }, {
-            title: '洋码（元）',
+            title: '码洋（元）',
             dataIndex: 'maYang'
         }, {
             title: '类型',
@@ -129,40 +129,49 @@ class TableRuKuPage extends Component {
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.search();
     }
 
-    componentDidCatch(error, info){
+    componentDidCatch(error, info) {
         console.error(error);
+    }
+
+    reset = () => {
+        this.setState({bookName:undefined, fromTT: undefined, toTT: undefined, tableA:[], tableB:[], tableC1:[], tableC2:[], resetLoading: true}, () => {
+            this.search().finally(() => {
+                message.success("重置成功。");
+                this.setState({resetLoading: false});
+            });
+        });
     }
 
     search = () => {
         const {fromTT, toTT} = this.state;
 
-        const query=`?search=${fromTT?"&from="+fromTT.unix():''}${toTT?"&to="+toTT.unix():''}`,
-            path = `/api/callAPI/tableds${query}`;
+        const query = `?search=${fromTT ? "&from=" + fromTT : ''}${toTT ? "&to=" + toTT : ''}`,
+            path = `/tableds${query}`;
 
         this.setState({loading: true});
-        request.get(path).then((response) => {
+        return request.get(path).then((response) => {
             const data = response.body;
             this.setState({tableA: data});
             // return request.get("/tableB");
         }).then(() => {
-            if( fromTT && toTT) {
-                return request.get(`/api/callAPI/tablees${query}`)
+            if (fromTT && toTT) {
+                return request.get(`/tablees${query}`)
                     .then((response) => {
                         const data = response.body;
                         this.setState({tableB: data});
                     });
             }
         }).then(() => {
-            if( fromTT && toTT) {
-                return request.get(`/api/callAPI/tablef1s${query}`)
+            if (fromTT && toTT) {
+                return request.get(`/tablef1s${query}`)
                     .then((response) => {
                         const data = response.body;
                         this.setState({tableC1: data});
-                        return request.get(`/api/callAPI/tablef2s${query}`)
+                        return request.get(`/tablef2s${query}`)
                             .then((response) => {
                                 const data = response.body;
                                 this.setState({tableC2: data});
@@ -180,14 +189,14 @@ class TableRuKuPage extends Component {
     }
 
     render() {
-        const {loading, fromTT, toTT, tableA, tableB, tableC1, tableC2} = this.state;
+        const {loading, resetLoading, fromTT, toTT, tableA, tableB, tableC1, tableC2} = this.state;
 
         return [
             <h1 key="module_sc_title">
                 入库数据
             </h1>,
             <div key="module_sc_content">
-                <Row gutter={6}>
+                <Row gutter={16}>
                     <Col span={4} offset={1}>
                         <DatePicker value={fromTT} placeholder="请选择起始日期(必填)"
                                     disabledDate={
@@ -212,35 +221,37 @@ class TableRuKuPage extends Component {
                             this.setState({toTT: date});
                         }}/>
                     </Col>
-                    <Col span={2} push={2}>
-                        <Button onClick={this.search} loading={loading} disabled={!(fromTT && toTT)} type="primary" icon="search">查询</Button>
+                    <Col span={5} offset={1}>
+                        <Button onClick={this.search} loading={loading} disabled={!(fromTT && toTT)} type="primary"
+                                icon="search">查询</Button>
+                        <Button  style={{marginLeft: '10px'}} onClick={this.reset} loading={resetLoading} disabled={!(fromTT && toTT)} icon="sync">重置</Button>
                     </Col>
                 </Row>
                 <Divider/>
                 <Row>
                     <Col span={22} offset={1}>
                         <Tabs defaultActiveKey="1" tabBarExtraContent={[
-                            <Button type="primary" style={{marginRight: "10px"}} key="tabAction1" onClick={this.search} icon="reload">刷新</Button>,
-                            <Button type="primary" key="tabAction2" href="http://localhost:12378/exports" icon="export">导出</Button>
+                            <Button type="primary" key="tabAction2" href="/exports" icon="export">导出</Button>
                         ]}>
                             <TabPane tab={<span><Icon type="desktop"/>原始数据明细表</span>} key="1">
-                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsA} dataSource={tableA}/>
+                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle"
+                                       columns={columnsA} dataSource={tableA}/>
                             </TabPane>
-                            {tableB.length > 0 &&
-                            <TabPane tab={<span><Icon type="line-chart"/>按书名执行分类汇总的明细表</span>} key="2">
-                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsB} dataSource={tableB}/>
+                            <TabPane disabled={tableB.length <= 0}
+                                     tab={<span><Icon type="line-chart"/>按书名执行分类汇总的明细表</span>} key="2">
+                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle"
+                                       columns={columnsB} dataSource={tableB}/>
                             </TabPane>
-                            }
-                            {tableC1.length > 0 &&
-                            <TabPane tab={<span><Icon type="area-chart"/>按类型执行分类汇总的明细表</span>} key="3">
-                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsC} dataSource={tableC1}/>
+                            <TabPane disabled={tableC1.length <= 0}
+                                     tab={<span><Icon type="area-chart"/>按类型执行分类汇总的明细表</span>} key="3">
+                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle"
+                                       columns={columnsC} dataSource={tableC1}/>
                             </TabPane>
-                            }
-                            {tableC2.length > 0 &&
-                            <TabPane tab={<span><Icon type="pie-chart"/>按业务类型执行分类汇总的明细表</span>} key="4">
-                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle" columns={columnsD} dataSource={tableC2}/>
+                            <TabPane disabled={tableC2.length <= 0}
+                                     tab={<span><Icon type="pie-chart"/>按业务类型执行分类汇总的明细表</span>} key="4">
+                                <Table rowKey="id" loading={loading} pagination={TablePagination} size="middle"
+                                       columns={columnsD} dataSource={tableC2}/>
                             </TabPane>
-                            }
                         </Tabs>
                     </Col>
                 </Row>

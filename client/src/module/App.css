@@ -36,3 +36,9 @@
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
+
+  .ant-upload-list-item-name {
+    margin-left: 20px !important;
+    font-size: 18px;
+  }
+

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import MainPage from './module/MainPage';
 import {PATH_MAP as paths} from './common/Constant';
-import DashboardPage from './module/dashboard/DashboardPage';
 import TableSCPage from './module/table/TableSCPage';
 import TableRKPage from './module/table/TableRKPage';
 import TaskPage from './module/task/TaskPage';
@@ -32,7 +31,7 @@ class App extends Component {
                 <FadingRoute path={paths.tableSC} component={TableSCPage} />
                 <FadingRoute path={paths.tableRK} component={TableRKPage}/>
                 <FadingRoute path={paths.task} component={TaskPage}/>
-                <FadingRoute component={TaskPage}/>
+                <FadingRoute component={TableSCPage}/>
             </Switch>
       </Router>
     );
