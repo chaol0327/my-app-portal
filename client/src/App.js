@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import pf from './Polyfill.js';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import MainPage from './module/MainPage';
 import {PATH_MAP as paths} from './common/Constant';

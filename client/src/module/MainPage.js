@@ -4,11 +4,12 @@ import logo from './logo.jpg';
 import {Layout, Menu, Icon, Row, Col, Alert} from 'antd';
 import {NavLink} from "react-router-dom";
 import moment from 'moment';
+import _ from 'lodash';
 
 import {PATH_MAP as paths} from '../common/Constant';
 
 const {Header, Content, Footer} = Layout;
-const PathMap = Object.values(paths);
+const PathMap = _.values(paths);
 
 class MainPage extends Component {
 

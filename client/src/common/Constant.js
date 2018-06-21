@@ -10,3 +10,7 @@ export const PATH_MAP = {
     table6 : "/portal/table6",
     login: "/portal/login",
 };
+
+export const API_PREFIX = "";
+// export const API_PREFIX = "http://localhost:12378";
+export const IS_FAKE_MODE = false;

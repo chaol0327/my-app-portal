@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Col, Row, Button, Upload, Icon, message, Modal, Select, DatePicker} from 'antd';
 import request from 'superagent';
 import _ from 'lodash';
-
+import {API_PREFIX as prefix, IS_FAKE_MODE as isFake} from '../../common/Constant';
 
 const SyncTypeShowName = {
     bookAndTypeData: "图书分类数据表",
@@ -12,7 +12,7 @@ const SyncTypeShowName = {
 const tableProps = {
     name: 'record',
     multiple: false,
-    action: '/files',
+    action: isFake ? "/api/import/files" : `${prefix}/files`,
     listType: 'picture',
 }
 
@@ -23,7 +23,7 @@ class TaskPage extends Component {
         this.state = {
             fileList: [],
             fileStatusList: [],
-            selectFiles: [],
+            selectFile: undefined,
             syncType: undefined,
             loading: false,
             visible: false,
@@ -37,8 +37,8 @@ class TaskPage extends Component {
                     let fileStatusList = res.map((file, index) => {
                         return {
                             uid: index, name: file, staus: 'done',
-                            thumbUrl: '/img/excel.png',
-                            url: `/files/${file}`
+                            thumbUrl: isFake ? '/img/excel.png' : `${prefix}/img/excel.png`,
+                            url: `${prefix}/files/${file}`,
                         };
                     });
                     fileStatusList = _.uniqBy(fileStatusList, 'name');
@@ -48,7 +48,7 @@ class TaskPage extends Component {
     }
 
     getFileList = () => {
-        return request.get(`/files`)
+        return request.get(`${prefix}/files`)
             .then((res) => {
                 let fileList = res.body;
                 this.setState({fileList});
@@ -62,7 +62,7 @@ class TaskPage extends Component {
     }
     removeFile = (file) => {
         return new Promise((resolve, reject) => {
-            request.delete(`/files/${file.name}`).end(function (err, res) {
+            request.delete(`${prefix}/files/${file.name}`).end(function (err, res) {
                 if (res.ok) {
                     message.success(`${file.name} 删除成功。`);
                     resolve(true);
@@ -87,8 +87,8 @@ class TaskPage extends Component {
         }
 
         let fileStatusList = info.fileList.map((file) => {
-            file['thumbUrl'] = '/img/excel.png';
-            file['url'] = `http://localhost:12378/files/${file.name}`;
+            file['thumbUrl'] = `${prefix}/img/excel.png`;
+            file['url'] = `${prefix}/files/${file.name}`;
             return file;
         });
         this.setState({fileStatusList});
@@ -97,38 +97,31 @@ class TaskPage extends Component {
     //modal part
     showModal = () => {
         this.setState({
-            visible: true, selectFiles: [], syncType: undefined, fromTT: undefined, toTT: undefined
+            visible: true, selectFile: undefined, syncType: undefined
         }, this.getFileList);
     }
     handleSync = () => {
-        const {syncType, selectFiles, fromTT, toTT} = this.state;
+        const {syncType, selectFile} = this.state;
         this.setState({loading: true});
-        let count = selectFiles.length;
-        selectFiles.forEach((file) => {
-            request.put(`/syncData/${syncType}/${file}?from=${fromTT}&to=${toTT}`)
-                .then(() => {
-                    message.success(`${file} 导入成功。`);
-                    if (--count == 0) {
-                        this.setState({loading: false, visible: false}, () => {
-                            message.success('导入全部完成。');
-                        });
-                    }
-                }).catch((error) => {
-                message.error(`${file} 导入失败，请下次重试。`);
-                if (--count == 0) {
-                    this.setState({loading: false, visible: false}, () => {
-                        message.success('导入全部完成。');
-                    });
-                }
+        request.put(`${prefix}/syncData/${syncType}/${selectFile}`)
+            .then(() => {
+                this.setState({loading: false}, () => {
+                    message.success(`${selectFile} 导入成功。`);
+                });
+            }).catch((error) => {
+                console.error(error);
+                this.setState({loading: false}, () => {
+                    message.error(`${selectFile} 导入失败，请下次重试。`);
+                });
             })
-        });
-    }
+    };
+
     handleCancel = () => {
-        this.setState({visible: false, selectFiles: [], syncType: undefined, fromTT: undefined, toTT: undefined});
+        this.setState({visible: false, selectFile: undefined, syncType: undefined});
     }
 
     render() {
-        const {visible, loading, fileList, fileStatusList, syncType, selectFiles, fromTT, toTT} = this.state;
+        const {visible, loading, fileList, fileStatusList, syncType, selectFile} = this.state;
         return ([
             <Row key="task1">
                 <Col span={10} offset={1}>
@@ -158,41 +151,10 @@ class TaskPage extends Component {
                    footer={[
                        <Button key="back" onClick={this.handleCancel}>取消</Button>,
                        <Button key="submit" type="primary"
-                               disabled={!(syncType && selectFiles && (syncType == 'bookAndTypeData' ? true : (fromTT && toTT)))}
+                               disabled={!(syncType && selectFile)}
                                loading={loading} onClick={this.handleSync}>确定</Button>,
                    ]}
             >
-                {(syncType == 'rukuData' || syncType == 'shengchanData') &&
-                [<Row gutter={16} key="sync_1">
-                    <Col span={10} offset={1}>
-                        <DatePicker value={fromTT} placeholder="请选择起始日期(必填)"
-                                    disabledDate={
-                                        (current) => {
-                                            if (current && toTT)
-                                                return current.isSameOrAfter(toTT)
-                                            else
-                                                return false;
-                                        }} onChange={(date, dateString) => {
-                            this.setState({fromTT: date});
-                        }}/>
-                    </Col>
-                    <Col span={10}>
-                        <DatePicker value={toTT} placeholder="请选择结束日期(必填)"
-                                    disabledDate={
-                                        (current) => {
-                                            if (current && fromTT)
-                                                return current.isSameOrBefore(fromTT);
-                                            else
-                                                return false;
-                                        }} onChange={(date, dateString) => {
-                            this.setState({toTT: date});
-                        }}/>
-                    </Col>
-                </Row>,
-                    <br key='sync_2'/>]
-                }
-
-
                 <Row gutter={16}>
                     <Col span={8} offset={1}>
                         <Select style={{width: '100%'}}
@@ -208,12 +170,11 @@ class TaskPage extends Component {
                     </Col>
                     <Col span={12}>
                         <Select
-                            mode="multiple"
-                            value={selectFiles}
+                            value={selectFile}
                             style={{width: '100%'}}
                             placeholder="请选择导入的文件"
                             onChange={(value) => {
-                                this.setState({selectFiles: value});
+                                this.setState({selectFile: value});
                             }}>
                             {fileList.map((file) => {
                                 return <Select.Option key={file}>{file}</Select.Option>;
